@@ -44,39 +44,29 @@ public class Client implements ActionListener {
 
 				// TODO: show cell
 
-				if(isBlank(row - 1, column - 1) && !isShown(row - 1, column - 1)) {
-					rows.push(row - 1);
-					columns.push(column  - 1);
-				}
-				else if(isBlank(row - 1, column) && !isShown(row - 1, column)) {
-					rows.push(row - 1);
-					columns.push(column);
-				}
-				else if(isBlank(row - 1, column + 1) && !isShown(row - 1, column + 1)) {
-					rows.push(row - 1);
-					columns.push(column  + 1);
-				}
-				else if(isBlank(row, column - 1) && !isShown(row, column - 1)) {
-					rows.push(row);
-					columns.push(column  - 1);
-				}
-				else if(isBlank(row, column + 1) && !isShown(row, column + 1)) {
-					rows.push(row);
-					columns.push(column  + 1);
-				}
-				else if(isBlank(row + 1, column - 1) && !isShown(row + 1, column - 1)) {
-					rows.push(row + 1);
-					columns.push(column  - 1);
-				}
-				else if(isBlank(row + 1, column) && !isShown(row + 1, column)) {
-					rows.push(row + 1);
-					columns.push(column);
-				}
-				else if(isBlank(row + 1, column + 1) && !isShown(row + 1, column + 1)) {
-					rows.push(row + 1);
-					columns.push(column  + 1);
-				}
+				checkNeighbor(row - 1, column - 1, rows, columns);
+				checkNeighbor(row - 1, column, rows, columns);
+				checkNeighbor(row - 1, column + 1, rows, columns);
+				checkNeighbor(row, column - 1, rows, columns);
+				checkNeighbor(row, column + 1, rows, columns);
+				checkNeighbor(row + 1, column - 1, rows, columns);
+				checkNeighbor(row + 1, column, rows, columns);
+				checkNeighbor(row + 1, column + 1, rows, columns);
 			}
+	}
+
+
+	private void checkNeighbor(int row, int column, Stack<Integer> rows, Stack<Integer> columns){
+		// test for index out of range
+		boolean isValidRow = ((row >= 0) && (row < NUM_ROWS));
+		boolean isValidColumn = ((column >= 0) && (column < NUM_COLUMNS));
+		boolean isBlankCell = isBlank(row - 1, column - 1);
+		boolean isShownCell = isShown(row - 1, column - 1);
+
+		if(isValidRow && isValidColumn && isBlankCell && !isShownCell) {
+			rows.push(row - 1);
+			columns.push(column  - 1);
+		}
 	}
 
 	private boolean isBlank(int row, int column) {
@@ -85,7 +75,7 @@ public class Client implements ActionListener {
 		return (' ' == grid[row][column]);
 	}
 
-	private boolean isShown(int row, int column){
+	private boolean isShown(int row, int column) {
 		// TODO:
 		return false;
 	}
