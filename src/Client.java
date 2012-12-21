@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Stack;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -28,25 +29,65 @@ public class Client implements ActionListener {
 		// else if cell is mine
 			// end game
 		// else
+
 			// add cell to set
-			// while set is not empty:
-				// pop first cell in set
-				// show cell
+			Stack<Integer> rows = new Stack<Integer>();
+			Stack<Integer> columns = new Stack<Integer>();
+			// Note: This is a good reason to make Cell a class.
 
-				// row - 1, col - 1
-				// if <some-method(row - 1, col -1)>, then add cell to set
-				// if((grid[row - 1][col - 1] is blank) && (grid[row - 1][col - 1] hasn't been shown)) add cell to set
-				// create two methods: isBlank(int row, int column), isShown(int row, int column)
+			int row, column;
 
-				// row - 1, col
-				// row - 1, col + 1
+			while(!rows.isEmpty() && !columns.isEmpty()){
 
-				// row, col - 1
-				// row, col + 1
+				row = rows.pop();
+				column = columns.pop();
 
-				// row + 1, col - 1
-				// row + 1, col
-				// row + 1, col + 1
+				// TODO: show cell
+
+				if(isBlank(row - 1, column - 1) && !isShown(row - 1, column - 1)) {
+					rows.push(row - 1);
+					columns.push(column  - 1);
+				}
+				else if(isBlank(row - 1, column) && !isShown(row - 1, column)) {
+					rows.push(row - 1);
+					columns.push(column);
+				}
+				else if(isBlank(row - 1, column + 1) && !isShown(row - 1, column + 1)) {
+					rows.push(row - 1);
+					columns.push(column  + 1);
+				}
+				else if(isBlank(row, column - 1) && !isShown(row, column - 1)) {
+					rows.push(row);
+					columns.push(column  - 1);
+				}
+				else if(isBlank(row, column + 1) && !isShown(row, column + 1)) {
+					rows.push(row);
+					columns.push(column  + 1);
+				}
+				else if(isBlank(row + 1, column - 1) && !isShown(row + 1, column - 1)) {
+					rows.push(row + 1);
+					columns.push(column  - 1);
+				}
+				else if(isBlank(row + 1, column) && !isShown(row + 1, column)) {
+					rows.push(row + 1);
+					columns.push(column);
+				}
+				else if(isBlank(row + 1, column + 1) && !isShown(row + 1, column + 1)) {
+					rows.push(row + 1);
+					columns.push(column  + 1);
+				}
+			}
+	}
+
+	private boolean isBlank(int row, int column) {
+		// Follow best practice of listing constant first in equality expressions.
+		// This prevents accidentally assigning constant to variable, instead of checking for equality.
+		return (' ' == grid[row][column]);
+	}
+
+	private boolean isShown(int row, int column){
+		// TODO:
+		return false;
 	}
 
 	public static void main(String[] args) {
