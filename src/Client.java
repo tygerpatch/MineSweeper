@@ -1,11 +1,13 @@
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Stack;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Client implements ActionListener {
+public class Client extends JPanel implements ActionListener {
 	// start with just a 9x9 grid with 10 mines
 	// (later allow user to specify these settings)
 	final int NUM_ROWS = 9;
@@ -17,6 +19,15 @@ public class Client implements ActionListener {
 		for(int row = 0; row < NUM_ROWS; row++){
 			for(int column = 0; column < NUM_COLUMNS; column++){
 				grid[row][column] = ' ';	// empty square
+			}
+		}
+	}
+
+	public Client(){
+		this.setLayout(new GridLayout(9, 9));
+		for(int row = 0; row < NUM_ROWS; row++){
+			for(int column = 0; column < NUM_COLUMNS; column++){
+				this.add(new JButton(row + ", " + column));
 			}
 		}
 	}
@@ -67,6 +78,8 @@ public class Client implements ActionListener {
 			rows.push(row - 1);
 			columns.push(column  - 1);
 		}
+
+		// Note: By checking if cell has shown, stacks become implicit sets.
 	}
 
 	private boolean isBlank(int row, int column) {
@@ -82,7 +95,7 @@ public class Client implements ActionListener {
 
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("~ minesweeper ~");
-		JPanel panel = new JPanel();
+		JPanel panel = new Client();
 		frame.setContentPane(panel);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
