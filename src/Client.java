@@ -11,31 +11,44 @@ import javax.swing.JPanel;
 // TODO: rename class to Minesweeper
 public class Client extends JPanel implements ActionListener {
 
-	private char grid[][] = new char[NUM_ROWS][NUM_COLUMNS];
-
 	private final int NUM_ROWS = 9;
 	private final int NUM_COLUMNS = 9;
 
 	private final int NUM_MINES = 10;
 
+	private char grid[][] = new char[NUM_ROWS][NUM_COLUMNS];
+
 	public Client() {
+		System.out.println("~ start ~");
+
 		// start with just a 9x9 grid with 10 mines
 		// (later allow user to specify these settings)
-		this.setLayout(new GridLayout(9, 9));
+		this.setLayout(new GridLayout(9, 9, 10, 10));
+
+		// Where I learned about using Layout Manager to add padding
+		// http://stackoverflow.com/questions/5328405/jpanel-padding-in-java
 
 		JButton button;
 
-		for(int row = 0; row < NUM_ROWS; row++) {
+		for(int row = 0; row < NUM_ROWS; row++){
 			for(int column = 0; column < NUM_COLUMNS; column++){
-				button = new JButton(" ");
-				button.addActionListener(this);
-				this.add(button);
-				// TODO: add padding between buttons
+				grid[row][column] = ' ';	// empty square
 			}
 		}
 
 		// "splatter" grid with mines
 		splatter();
+
+		for(int row = 0; row < NUM_ROWS; row++) {
+			for(int column = 0; column < NUM_COLUMNS; column++){
+				button = new Cell("" + grid[row][column], row, column);
+				// TODO: Cell should display what's on the grid at that location only when the user clicks on it
+				button.addActionListener(this);
+				this.add(button);
+			}
+		}
+
+		System.out.println("~ end ~");
 	}
 
 	private void splatter() {
@@ -100,29 +113,38 @@ public class Client extends JPanel implements ActionListener {
 	}
 
 	private void updateCounter(int row, int column){
-		if(isOnGrid(row, column)){
+		if(isOnGrid(row, column)) {
+			System.out.print("Updating Count @(" + row + ", " + column + ") ");
 			if(' ' == grid[row][column]) {
+				System.out.println("1");
 				grid[row][column] = '1';
 			}
 			else if('1' == grid[row][column]) {
+				System.out.println("2");
 					grid[row][column] = '2';
 			}
 			else if('2' == grid[row][column]) {
+				System.out.println("3");
 					grid[row][column] = '3';
 			}
 			else if('3' == grid[row][column]) {
+				System.out.println("4");
 					grid[row][column] = '4';
 			}
 			else if('4' == grid[row][column]) {
+				System.out.println("5");
 					grid[row][column] = '5';
 			}
 			else if('5' == grid[row][column]) {
+				System.out.println("6");
 					grid[row][column] = '6';
 			}
 			else if('6' == grid[row][column]) {
+				System.out.println("7");
 					grid[row][column] = '7';
 			}
 			else if('7' == grid[row][column]) {
+				System.out.println("8");
 					grid[row][column] = '8';
 			}
 		}
@@ -130,49 +152,57 @@ public class Client extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
-		actionEvent.getSource();
-		// TODO: how to get location of button pressed?
+		JButton button = (JButton) actionEvent.getSource();
+		button.setEnabled(false);
 
-		// if cell is number
-			// show number
-		// else if cell is mine
-			// end game
-		// else
+//		Cell cell = (Cell)actionEvent.getSource();
+//		int row = cell.getRow();
+//		int column = cell.getColumn();
+//
+//		cell.setText("" + grid[row][column]);
 
-			// add cell to set
-			Stack<Integer> rows = new Stack<Integer>();
-			Stack<Integer> columns = new Stack<Integer>();
-			// Note: This is a good reason to make Cell a class.
-
-			int row, column;
-
-			while(!rows.isEmpty() && !columns.isEmpty()){
-
-				row = rows.pop();
-				column = columns.pop();
-
-				// TODO: show cell
-
-				checkNeighbor(row - 1, column - 1, rows, columns);
-				checkNeighbor(row - 1, column, rows, columns);
-				checkNeighbor(row - 1, column + 1, rows, columns);
-				checkNeighbor(row, column - 1, rows, columns);
-				checkNeighbor(row, column + 1, rows, columns);
-				checkNeighbor(row + 1, column - 1, rows, columns);
-				checkNeighbor(row + 1, column, rows, columns);
-				checkNeighbor(row + 1, column + 1, rows, columns);
-			}
+//		// TODO: how to get location of button pressed?
+//
+//		// if cell is number
+//			// show number
+//		// else if cell is mine
+//			// end game
+//		// else
+//
+//			// add cell to set
+//			Stack<Integer> rows = new Stack<Integer>();
+//			Stack<Integer> columns = new Stack<Integer>();
+//			// Note: This is a good reason to make Cell a class.
+//
+//			int row, column;
+//
+//			while(!rows.isEmpty() && !columns.isEmpty()){
+//
+//				row = rows.pop();
+//				column = columns.pop();
+//
+//				// TODO: show cell
+//
+//				checkNeighbor(row - 1, column - 1, rows, columns);
+//				checkNeighbor(row - 1, column, rows, columns);
+//				checkNeighbor(row - 1, column + 1, rows, columns);
+//				checkNeighbor(row, column - 1, rows, columns);
+//				checkNeighbor(row, column + 1, rows, columns);
+//				checkNeighbor(row + 1, column - 1, rows, columns);
+//				checkNeighbor(row + 1, column, rows, columns);
+//				checkNeighbor(row + 1, column + 1, rows, columns);
+//			}
 	}
 
 	// ****
 
-	private void clearGrid(){
-		for(int row = 0; row < NUM_ROWS; row++){
-			for(int column = 0; column < NUM_COLUMNS; column++){
-				grid[row][column] = ' ';	// empty square
-			}
-		}
-	}
+//	private void clearGrid(){
+//		for(int row = 0; row < NUM_ROWS; row++){
+//			for(int column = 0; column < NUM_COLUMNS; column++){
+//				grid[row][column] = ' ';	// empty square
+//			}
+//		}
+//	}
 
 
 
@@ -206,6 +236,7 @@ public class Client extends JPanel implements ActionListener {
 		JFrame frame = new JFrame("~ minesweeper ~");
 		JPanel panel = new Client();
 		frame.setContentPane(panel);
+		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
