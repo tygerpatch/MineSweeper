@@ -8,17 +8,36 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+// TODO: rename class to Minesweeper
 public class Client extends JPanel implements ActionListener {
-	// start with just a 9x9 grid with 10 mines
-	// (later allow user to specify these settings)
-	final int NUM_ROWS = 9;
-	final int NUM_COLUMNS = 9;
 
-	char grid[][] = new char[NUM_ROWS][NUM_COLUMNS];
+	private char grid[][] = new char[NUM_ROWS][NUM_COLUMNS];
 
-	int NUM_MINES = 10;
+	private final int NUM_ROWS = 9;
+	private final int NUM_COLUMNS = 9;
 
-	// method to "splatter" grid with mines
+	private final int NUM_MINES = 10;
+
+	public Client() {
+		// start with just a 9x9 grid with 10 mines
+		// (later allow user to specify these settings)
+		this.setLayout(new GridLayout(9, 9));
+
+		JButton button;
+
+		for(int row = 0; row < NUM_ROWS; row++) {
+			for(int column = 0; column < NUM_COLUMNS; column++){
+				button = new JButton(" ");
+				button.addActionListener(this);
+				this.add(button);
+				// TODO: add padding between buttons
+			}
+		}
+
+		// "splatter" grid with mines
+		splatter();
+	}
+
 	private void splatter() {
 		int row, column;
 		int count = NUM_MINES;
@@ -40,6 +59,33 @@ public class Client extends JPanel implements ActionListener {
 				count--;
 			}
 		}
+	}
+
+	private boolean hasNeighboringCounter(int row, int column) {
+		return isNeighboringCounter(row - 1, column - 1) ||
+				isNeighboringCounter(row - 1, column) ||
+				isNeighboringCounter(row - 1, column + 1) ||
+				isNeighboringCounter(row, column - 1) ||
+				isNeighboringCounter(row, column + 1) ||
+				isNeighboringCounter(row + 1, column - 1) ||
+				isNeighboringCounter(row + 1, column) ||
+				isNeighboringCounter(row + 1, column + 1);
+	}
+
+	private boolean isNeighboringCounter(int row, int column){
+		if(isOnGrid(row, column)) {
+			// basically looking for anything but a mine
+			return ('M' != grid[row][column]);
+		}
+
+		return false;
+	}
+
+	private boolean isOnGrid(int row, int column){
+		boolean isValidRow = ((row >= 0) && (row < NUM_ROWS));
+		boolean isValidColumn = ((column >= 0) && (column < NUM_COLUMNS));
+
+		return (isValidRow && isValidColumn);
 	}
 
 	private void updateNeighboringCounters(int row, int column) {
@@ -82,53 +128,11 @@ public class Client extends JPanel implements ActionListener {
 		}
 	}
 
-	private boolean hasNeighboringCounter(int row, int column) {
-		return isNeighboringCounter(row - 1, column - 1) ||
-				isNeighboringCounter(row - 1, column) ||
-				isNeighboringCounter(row - 1, column + 1) ||
-				isNeighboringCounter(row, column - 1) ||
-				isNeighboringCounter(row, column + 1) ||
-				isNeighboringCounter(row + 1, column - 1) ||
-				isNeighboringCounter(row + 1, column) ||
-				isNeighboringCounter(row + 1, column + 1);
-	}
-
-	private boolean isNeighboringCounter(int row, int column){
-		if(isOnGrid(row, column)) {
-			// basically looking for anything but a mine
-			return ('M' != grid[row][column]);
-		}
-
-		return false;
-	}
-
-	private boolean isOnGrid(int row, int column){
-		boolean isValidRow = ((row >= 0) && (row < NUM_ROWS));
-		boolean isValidColumn = ((column >= 0) && (column < NUM_COLUMNS));
-
-		return (isValidRow && isValidColumn);
-	}
-
-	private void clearGrid(){
-		for(int row = 0; row < NUM_ROWS; row++){
-			for(int column = 0; column < NUM_COLUMNS; column++){
-				grid[row][column] = ' ';	// empty square
-			}
-		}
-	}
-
-	public Client(){
-		this.setLayout(new GridLayout(9, 9));
-		for(int row = 0; row < NUM_ROWS; row++){
-			for(int column = 0; column < NUM_COLUMNS; column++){
-				this.add(new JButton(row + ", " + column));
-			}
-		}
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 		actionEvent.getSource();
+		// TODO: how to get location of button pressed?
+
 		// if cell is number
 			// show number
 		// else if cell is mine
@@ -159,6 +163,18 @@ public class Client extends JPanel implements ActionListener {
 				checkNeighbor(row + 1, column + 1, rows, columns);
 			}
 	}
+
+	// ****
+
+	private void clearGrid(){
+		for(int row = 0; row < NUM_ROWS; row++){
+			for(int column = 0; column < NUM_COLUMNS; column++){
+				grid[row][column] = ' ';	// empty square
+			}
+		}
+	}
+
+
 
 	private void checkNeighbor(int row, int column, Stack<Integer> rows, Stack<Integer> columns){
 		// test for index out of range
