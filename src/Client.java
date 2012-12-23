@@ -223,14 +223,20 @@ public class Client extends JPanel implements MouseListener {
 		Cell cell = (Cell) mouseEvent.getSource();
 
 		if(SwingUtilities.isRightMouseButton(mouseEvent)) {
-			cell.setText("F");
+			if(cell.getText().equalsIgnoreCase("F")) {
+				cell.setText(" ");
+			}
+			else {
+				cell.setText("F");
+			}
 		}
-		else {
-			int row = cell.getRow();
-			int column = cell.getColumn();
+		// essentially disallow user from digging up flag
+		else if(!cell.getText().equalsIgnoreCase("F")) {
+				int row = cell.getRow();
+				int column = cell.getColumn();
 
-			cell.setText("" + grid[row][column]);
-			cell.setEnabled(false);
+				cell.setText("" + grid[row][column]);
+				cell.setEnabled(false);
 		}
 	}
 
