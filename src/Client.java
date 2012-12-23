@@ -3,17 +3,18 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Random;
 import java.util.Stack;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 // TODO: rename class to Minesweeper
-public class Client extends JPanel implements ActionListener {
+public class Client extends JPanel implements MouseListener {
 
 	private final int NUM_ROWS = 9;
 	private final int NUM_COLUMNS = 9;
@@ -52,7 +53,8 @@ public class Client extends JPanel implements ActionListener {
 		for(int row = 0; row < NUM_ROWS; row++) {
 			for(int column = 0; column < NUM_COLUMNS; column++) {
 				button = new Cell("  ", row, column);
-				button.addActionListener(this);
+				// button.addActionListener(this);
+				button.addMouseListener(this);
 
 				// change margin size to reduce amount of space needed to display button's label
 			    button.setMargin(new Insets(1, 1, 1, 1));
@@ -201,21 +203,37 @@ public class Client extends JPanel implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent actionEvent) {
-		Cell cell = (Cell) actionEvent.getSource();
-		int row = cell.getRow();
-		int column = cell.getColumn();
+	public void mouseClicked(MouseEvent mouseEvent) {
+	}
 
-		cell.setText("" + grid[row][column]);
-		cell.setEnabled(false);
+	@Override
+	public void mouseEntered(MouseEvent mouseEvent) {
+	}
 
-//		Cell cell = (Cell)actionEvent.getSource();
-//		int row = cell.getRow();
-//		int column = cell.getColumn();
-//
-//		cell.setText("" + grid[row][column]);
+	@Override
+	public void mouseExited(MouseEvent mouseEvent) {
+	}
 
-//		// TODO: how to get location of button pressed?
+	@Override
+	public void mousePressed(MouseEvent mouseEvent) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent mouseEvent) {
+		Cell cell = (Cell) mouseEvent.getSource();
+
+		if(SwingUtilities.isRightMouseButton(mouseEvent)) {
+			cell.setText("F");
+		}
+		else {
+			int row = cell.getRow();
+			int column = cell.getColumn();
+
+			cell.setText("" + grid[row][column]);
+			cell.setEnabled(false);
+		}
+	}
+
 //
 //		// if cell is number
 //			// show number
@@ -246,45 +264,33 @@ public class Client extends JPanel implements ActionListener {
 //				checkNeighbor(row + 1, column, rows, columns);
 //				checkNeighbor(row + 1, column + 1, rows, columns);
 //			}
-	}
-
-	// ****
-
-//	private void clearGrid(){
-//		for(int row = 0; row < NUM_ROWS; row++){
-//			for(int column = 0; column < NUM_COLUMNS; column++){
-//				grid[row][column] = ' ';	// empty square
-//			}
-//		}
 //	}
 
+//	private void checkNeighbor(int row, int column, Stack<Integer> rows, Stack<Integer> columns){
+//		// test for index out of range
+//		boolean isValidRow = ((row >= 0) && (row < NUM_ROWS));
+//		boolean isValidColumn = ((column >= 0) && (column < NUM_COLUMNS));
+//		boolean isBlankCell = isBlank(row - 1, column - 1);
+//		boolean isShownCell = isShown(row - 1, column - 1);
+//
+//		if(isValidRow && isValidColumn && isBlankCell && !isShownCell) {
+//			rows.push(row - 1);
+//			columns.push(column  - 1);
+//		}
+//
+//		// Note: By checking if cell has shown, stacks become implicit sets.
+//	}
 
+//	private boolean isBlank(int row, int column) {
+//		// Follow best practice of listing constant first in equality expressions.
+//		// This prevents accidentally assigning constant to variable, instead of checking for equality.
+//		return (' ' == grid[row][column]);
+//	}
 
-	private void checkNeighbor(int row, int column, Stack<Integer> rows, Stack<Integer> columns){
-		// test for index out of range
-		boolean isValidRow = ((row >= 0) && (row < NUM_ROWS));
-		boolean isValidColumn = ((column >= 0) && (column < NUM_COLUMNS));
-		boolean isBlankCell = isBlank(row - 1, column - 1);
-		boolean isShownCell = isShown(row - 1, column - 1);
-
-		if(isValidRow && isValidColumn && isBlankCell && !isShownCell) {
-			rows.push(row - 1);
-			columns.push(column  - 1);
-		}
-
-		// Note: By checking if cell has shown, stacks become implicit sets.
-	}
-
-	private boolean isBlank(int row, int column) {
-		// Follow best practice of listing constant first in equality expressions.
-		// This prevents accidentally assigning constant to variable, instead of checking for equality.
-		return (' ' == grid[row][column]);
-	}
-
-	private boolean isShown(int row, int column) {
-		// TODO:
-		return false;
-	}
+//	private boolean isShown(int row, int column) {
+//		// TODO:
+//		return false;
+//	}
 
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("~ minesweeper ~");
