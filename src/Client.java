@@ -34,7 +34,17 @@ public class Client extends JPanel implements MouseListener {
 		}
 
 		// "splatter" grid with mines
-		splatter();
+//		splatter();
+
+		grid[0] = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8'};
+		grid[1] = new char[]{'0', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '8'};
+		grid[2] = new char[]{'0', ' ', '2', '3', '4', '5', '6', ' ', '8'};
+		grid[3] = new char[]{'0', ' ', '2', ' ', ' ', ' ', '6', ' ', '8'};
+		grid[4] = new char[]{'0', ' ', '2', ' ', '4', '5', '6', ' ', '8'};
+		grid[5] = new char[]{'0', ' ', '2', ' ', '4', ' ', '6', ' ', '8'};
+		grid[6] = new char[]{'0', ' ', '2', ' ', '4', '5', '6', ' ', '8'};
+		grid[7] = new char[]{'0', ' ', '2', ' ', ' ', ' ', ' ', ' ', '8'};
+		grid[8] = new char[]{'0', ' ', '2', '3', '4', '5', '6', '7', '8'};
 
 		// calculate the preferred size for the JPanel
 		JButton button = new JButton("M");
@@ -258,23 +268,26 @@ public class Client extends JPanel implements MouseListener {
 					rows.push(row);
 					columns.push(column);
 
+//					System.out.println("rows.isEmpty() " + rows.isEmpty());
+//					System.out.println("columns.isEmpty() " + columns.isEmpty());
+
 					while(!rows.isEmpty() && !columns.isEmpty()){
 
 						row = rows.pop();
 						column = columns.pop();
 
-						System.out.println("Cell @ (" + row + ", " + column + ")");
+//						System.out.println("Cell @ (" + row + ", " + column + ")");
 
 						cells[row][column].setText("" + grid[row][column]);
 
-						checkNeighbor(row - 1, column - 1, rows, columns);
-						checkNeighbor(row - 1, column, rows, columns);
-						checkNeighbor(row - 1, column + 1, rows, columns);
-						checkNeighbor(row, column - 1, rows, columns);
-						checkNeighbor(row, column + 1, rows, columns);
-						checkNeighbor(row + 1, column - 1, rows, columns);
-						checkNeighbor(row + 1, column, rows, columns);
-						checkNeighbor(row + 1, column + 1, rows, columns);
+//						checkNeighbor(row - 1, column - 1, rows, columns);
+//						checkNeighbor(row - 1, column, rows, columns);
+//						checkNeighbor(row - 1, column + 1, rows, columns);
+//						checkNeighbor(row, column - 1, rows, columns);
+//						checkNeighbor(row, column + 1, rows, columns);
+//						checkNeighbor(row + 1, column - 1, rows, columns);
+//						checkNeighbor(row + 1, column, rows, columns);
+//						checkNeighbor(row + 1, column + 1, rows, columns);
 					}
 				}
 		}
