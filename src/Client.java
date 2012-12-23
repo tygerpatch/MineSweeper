@@ -22,6 +22,7 @@ public class Client extends JPanel implements MouseListener {
 	private final int NUM_MINES = 10;
 
 	private char grid[][] = new char[NUM_ROWS][NUM_COLUMNS];
+	private JButton cells[][] = new JButton[NUM_ROWS][NUM_COLUMNS];
 
 	public Client() {
 		this.setLayout(new GridLayout(9, 9));
@@ -53,6 +54,8 @@ public class Client extends JPanel implements MouseListener {
 		for(int row = 0; row < NUM_ROWS; row++) {
 			for(int column = 0; column < NUM_COLUMNS; column++) {
 				button = new Cell("  ", row, column);
+				cells[row][column] = button;
+
 				// button.addActionListener(this);
 				button.addMouseListener(this);
 
@@ -246,69 +249,60 @@ public class Client extends JPanel implements MouseListener {
 					// TODO: disable mouse clicks on cells
 				}
 				else if(' ' == ch) {
-					// expand
-					System.out.println("TODO: ");
+
+					// variables to store touching blank cells
+					Stack<Integer> rows = new Stack<Integer>();
+					Stack<Integer> columns = new Stack<Integer>();
+
+					// add cell to set
+					rows.push(row);
+					columns.push(column);
+
+					while(!rows.isEmpty() && !columns.isEmpty()){
+
+						row = rows.pop();
+						column = columns.pop();
+
+						System.out.println("Cell @ (" + row + ", " + column + ")");
+
+						cells[row][column].setText("" + grid[row][column]);
+
+						checkNeighbor(row - 1, column - 1, rows, columns);
+						checkNeighbor(row - 1, column, rows, columns);
+						checkNeighbor(row - 1, column + 1, rows, columns);
+						checkNeighbor(row, column - 1, rows, columns);
+						checkNeighbor(row, column + 1, rows, columns);
+						checkNeighbor(row + 1, column - 1, rows, columns);
+						checkNeighbor(row + 1, column, rows, columns);
+						checkNeighbor(row + 1, column + 1, rows, columns);
+					}
 				}
 		}
 	}
 
-//
-//		// if cell is number
-//			// show number
-//		// else if cell is mine
-//			// end game
-//		// else
-//
-//			// add cell to set
-//			Stack<Integer> rows = new Stack<Integer>();
-//			Stack<Integer> columns = new Stack<Integer>();
-//			// Note: This is a good reason to make Cell a class.
-//
-//			int row, column;
-//
-//			while(!rows.isEmpty() && !columns.isEmpty()){
-//
-//				row = rows.pop();
-//				column = columns.pop();
-//
-//				// TODO: show cell
-//
-//				checkNeighbor(row - 1, column - 1, rows, columns);
-//				checkNeighbor(row - 1, column, rows, columns);
-//				checkNeighbor(row - 1, column + 1, rows, columns);
-//				checkNeighbor(row, column - 1, rows, columns);
-//				checkNeighbor(row, column + 1, rows, columns);
-//				checkNeighbor(row + 1, column - 1, rows, columns);
-//				checkNeighbor(row + 1, column, rows, columns);
-//				checkNeighbor(row + 1, column + 1, rows, columns);
-//			}
-//	}
+	private void checkNeighbor(int row, int column, Stack<Integer> rows, Stack<Integer> columns) {
+		if(isOnGrid(row, column)) {
+			if(isBlank(row, column)) {
+				rows.push(row);
+				columns.push(column);
+			}
 
-//	private void checkNeighbor(int row, int column, Stack<Integer> rows, Stack<Integer> columns){
-//		// test for index out of range
-//		boolean isValidRow = ((row >= 0) && (row < NUM_ROWS));
-//		boolean isValidColumn = ((column >= 0) && (column < NUM_COLUMNS));
-//		boolean isBlankCell = isBlank(row - 1, column - 1);
-//		boolean isShownCell = isShown(row - 1, column - 1);
-//
-//		if(isValidRow && isValidColumn && isBlankCell && !isShownCell) {
-//			rows.push(row - 1);
-//			columns.push(column  - 1);
-//		}
-//
-//		// Note: By checking if cell has shown, stacks become implicit sets.
-//	}
+			// Note: A blank cell will never be touching a mine.
 
-//	private boolean isBlank(int row, int column) {
-//		// Follow best practice of listing constant first in equality expressions.
-//		// This prevents accidentally assigning constant to variable, instead of checking for equality.
-//		return (' ' == grid[row][column]);
-//	}
+			cells[row][column].setText("" + grid[row][column]);
+			cells[row][column].setEnabled(false);
+		}
+	}
 
-//	private boolean isShown(int row, int column) {
-//		// TODO:
-//		return false;
-//	}
+	private boolean isBlank(int row, int column) {
+		// Follow best practice of listing constant first in equality expressions.
+		// This prevents accidentally assigning constant to variable, instead of checking for equality.
+		return (' ' == grid[row][column]);
+	}
+
+	private boolean isShown(int row, int column) {
+		return cells[row][column].isEnabled();
+	}
 
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("~ minesweeper ~");
