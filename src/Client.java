@@ -24,6 +24,8 @@ public class Client extends JPanel implements MouseListener {
 	private char grid[][] = new char[NUM_ROWS][NUM_COLUMNS];
 	private JButton cells[][] = new JButton[NUM_ROWS][NUM_COLUMNS];
 
+	private boolean isGameOver;
+
 	public Client() {
 		this.setLayout(new GridLayout(9, 9));
 
@@ -34,17 +36,7 @@ public class Client extends JPanel implements MouseListener {
 		}
 
 		// "splatter" grid with mines
-//		splatter();
-
-		grid[0] = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8'};
-		grid[1] = new char[]{'0', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '8'};
-		grid[2] = new char[]{'0', ' ', '2', '3', '4', '5', '6', ' ', '8'};
-		grid[3] = new char[]{'0', ' ', '2', ' ', ' ', ' ', '6', ' ', '8'};
-		grid[4] = new char[]{'0', ' ', '2', ' ', '4', ' ', '6', ' ', '8'};
-		grid[5] = new char[]{'0', ' ', '2', ' ', '4', ' ', '6', ' ', '8'};
-		grid[6] = new char[]{'0', ' ', '2', ' ', '4', '5', '6', ' ', '8'};
-		grid[7] = new char[]{'0', ' ', '2', ' ', ' ', ' ', ' ', ' ', '8'};
-		grid[8] = new char[]{'0', ' ', '2', '3', '4', '5', '6', '7', '8'};
+		splatter();
 
 		// calculate the preferred size for the JPanel
 		JButton button = new JButton("M");
@@ -257,6 +249,7 @@ public class Client extends JPanel implements MouseListener {
 					System.out.println("Game Over");
 					// TODO: show pop up allowing user to either play again or quit
 					// TODO: disable mouse clicks on cells
+					// TODO: work with isGameOver variable
 				}
 				else if(' ' == ch) {
 
