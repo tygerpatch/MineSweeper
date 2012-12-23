@@ -1,4 +1,8 @@
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
@@ -19,14 +23,7 @@ public class Client extends JPanel implements ActionListener {
 	private char grid[][] = new char[NUM_ROWS][NUM_COLUMNS];
 
 	public Client() {
-		// start with just a 9x9 grid with 10 mines
-		// (later allow user to specify these settings)
-		this.setLayout(new GridLayout(9, 9, 10, 10));
-
-		// Where I learned about using Layout Manager to add padding
-		// http://stackoverflow.com/questions/5328405/jpanel-padding-in-java
-
-		JButton button;
+		this.setLayout(new GridLayout(9, 9));
 
 		for(int row = 0; row < NUM_ROWS; row++) {
 			for(int column = 0; column < NUM_COLUMNS; column++) {
@@ -37,12 +34,32 @@ public class Client extends JPanel implements ActionListener {
 		// "splatter" grid with mines
 		splatter();
 
+		// calculate the preferred size for the JPanel
+		JButton button = new JButton("M");
+		Font font = button.getFont();
+		FontMetrics fontMetrics = button.getFontMetrics(font);
+		// Where I learned about getting Font dimensions
+		// http://stackoverflow.com/questions/1524855/how-to-calculate-the-fonts-width
+
+		int width = fontMetrics.stringWidth("M");
+		int height = fontMetrics.stringWidth("M");
+
+		Dimension dimension = new Dimension((width + 2) * NUM_ROWS + 100, (height + 2) * NUM_COLUMNS + 50);
+		// TODO: determine frame's border width, which is what the additional 100 and 50 are  supposed to represent
+
+		this.setPreferredSize(dimension);
+
 		for(int row = 0; row < NUM_ROWS; row++) {
 			for(int column = 0; column < NUM_COLUMNS; column++) {
-				button = new Cell("" + grid[row][column], row, column);
-				// TODO: Cell should display what's on the grid at that location only when the user clicks on it
+				button = new Cell("  ", row, column);
 				button.addActionListener(this);
-				this.add(button);
+
+				// change margin size to reduce amount of space needed to display button's label
+			    button.setMargin(new Insets(1, 1, 1, 1));
+
+				// Where I learned about margins.
+				// http://www.coderanch.com/t/345647/GUI/java/JButton-text-padding
+				add(button);
 			}
 		}
 	}
@@ -185,8 +202,12 @@ public class Client extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
-		JButton button = (JButton) actionEvent.getSource();
-		button.setEnabled(false);
+		Cell cell = (Cell) actionEvent.getSource();
+		int row = cell.getRow();
+		int column = cell.getColumn();
+
+		cell.setText("" + grid[row][column]);
+		cell.setEnabled(false);
 
 //		Cell cell = (Cell)actionEvent.getSource();
 //		int row = cell.getRow();
