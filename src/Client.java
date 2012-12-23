@@ -235,8 +235,20 @@ public class Client extends JPanel implements MouseListener {
 				int row = cell.getRow();
 				int column = cell.getColumn();
 
-				cell.setText("" + grid[row][column]);
+				char ch = grid[row][column];
+
+				cell.setText("" + ch);
 				cell.setEnabled(false);
+
+				if('M' == ch) {
+					System.out.println("Game Over");
+					// TODO: show pop up allowing user to either play again or quit
+					// TODO: disable mouse clicks on cells
+				}
+				else if(' ' == ch) {
+					// expand
+					System.out.println("TODO: ");
+				}
 		}
 	}
 
