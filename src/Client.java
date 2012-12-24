@@ -10,6 +10,7 @@ import java.util.Stack;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -28,6 +29,8 @@ public class Client extends JPanel implements MouseListener {
 
 	public Client() {
 		this.setLayout(new GridLayout(9, 9));
+
+		isGameOver = false;
 
 		for(int row = 0; row < NUM_ROWS; row++) {
 			for(int column = 0; column < NUM_COLUMNS; column++) {
@@ -233,10 +236,11 @@ public class Client extends JPanel implements MouseListener {
 			}
 			else {
 				cell.setText("F");
+				// TODO: count # flags & notify user when they've won the game
 			}
 		}
 		// essentially disallow user from digging up flag
-		else if(!cell.getText().equalsIgnoreCase("F")) {
+		else if(!cell.getText().equalsIgnoreCase("F") && !isGameOver) {
 				int row = cell.getRow();
 				int column = cell.getColumn();
 
@@ -246,10 +250,16 @@ public class Client extends JPanel implements MouseListener {
 				cell.setEnabled(false);
 
 				if('M' == ch) {
-					System.out.println("Game Over");
-					// TODO: show pop up allowing user to either play again or quit
-					// TODO: disable mouse clicks on cells
-					// TODO: work with isGameOver variable
+					isGameOver = true;
+
+					int result = JOptionPane.showConfirmDialog(null, "Play Again?", "Game Over", JOptionPane.YES_NO_OPTION);
+
+					if(JOptionPane.YES_OPTION == result) {
+						System.out.println("TODO: Play Again");
+					}
+					else {
+						System.out.println("TODO: Close Window");
+					}
 				}
 				else if(' ' == ch) {
 
