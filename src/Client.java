@@ -317,10 +317,6 @@ public class Client extends JPanel implements MouseListener {
 		return (' ' == grid[row][column]);
 	}
 
-	private boolean isShown(int row, int column) {
-		return cells[row][column].isEnabled();
-	}
-
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("~ minesweeper ~");
 		JPanel panel = new Client();
