@@ -85,7 +85,17 @@ public class MineSweeper extends JFrame implements MouseListener {
 		}
 
 		// "splatter" grid with mines
-		splatter();
+		// splatter();
+
+		grid[0] = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8'};
+		grid[1] = new char[]{'0', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '8'};
+		grid[2] = new char[]{'0', ' ', '2', '3', '4', '5', '6', ' ', '8'};
+		grid[3] = new char[]{'0', ' ', '2', ' ', ' ', ' ', '6', ' ', '8'};
+		grid[4] = new char[]{'0', ' ', '2', ' ', '4', ' ', '6', ' ', '8'};
+		grid[5] = new char[]{'0', ' ', '2', ' ', '4', ' ', '6', ' ', '8'};
+		grid[6] = new char[]{'0', ' ', '2', ' ', '4', '5', '6', ' ', '8'};
+		grid[7] = new char[]{'0', ' ', '2', ' ', ' ', ' ', ' ', ' ', '8'};
+		grid[8] = new char[]{'0', ' ', '2', '3', '4', '5', '6', '7', '8'};
 	}
 
 	// method to "splatter" grid with mines
@@ -180,6 +190,7 @@ public class MineSweeper extends JFrame implements MouseListener {
 
 	private boolean updateCounter(int row, int column) {
 		if(isOnGrid(row, column)) {
+
 			if(' ' == grid[row][column]) {
 				grid[row][column] = '1';
 				return true;
@@ -299,46 +310,44 @@ public class MineSweeper extends JFrame implements MouseListener {
 					}
 				}
 				else if(' ' == ch) {
-
-					// variables to store touching blank cells
-					Stack<Integer> rows = new Stack<Integer>();
-					Stack<Integer> columns = new Stack<Integer>();
-
-					// add cell to set
-					rows.push(row);
-					columns.push(column);
-
-					while(!rows.isEmpty() && !columns.isEmpty()){
-
-						row = rows.pop();
-						column = columns.pop();
-
-						cells[row][column].setText("" + grid[row][column]);
-
-						checkNeighbor(row - 1, column - 1, rows, columns);
-						checkNeighbor(row - 1, column, rows, columns);//  ok, going up
-						checkNeighbor(row - 1, column + 1, rows, columns);
-						checkNeighbor(row, column - 1, rows, columns);
-						checkNeighbor(row, column + 1, rows, columns);
-						checkNeighbor(row + 1, column - 1, rows, columns);
-						checkNeighbor(row + 1, column, rows, columns); // ok, going down
-						checkNeighbor(row + 1, column + 1, rows, columns);
-					}
+					showIfBlank(row - 1, column - 1);
+					showIfBlank(row - 1, column);
+					showIfBlank(row - 1, column + 1);
+					showIfBlank(row, column - 1);
+					showIfBlank(row, column + 1);
+					showIfBlank(row + 1, column - 1);
+					showIfBlank(row + 1, column);
+					showIfBlank(row + 1, column + 1);
 				}
 		}
 	}
 
-	private void checkNeighbor(int row, int column, Stack<Integer> rows, Stack<Integer> columns) {
+	private void showIfBlank(int row, int column) {
+		// if location is on the grid
 		if(isOnGrid(row, column)) {
+
+			// if given cell is blank and hasn't been visited
 			if(isBlank(row, column) && cells[row][column].isEnabled()) {
-				rows.push(row);
-				columns.push(column);
+				// mark cell as having been visited
+				cells[row][column].setEnabled(false);
+
+				showIfBlank(row - 1, column - 1);
+				showIfBlank(row - 1, column);
+				showIfBlank(row - 1, column + 1);
+				showIfBlank(row, column - 1);
+				showIfBlank(row, column + 1);
+				showIfBlank(row + 1, column - 1);
+				showIfBlank(row + 1, column);
+				showIfBlank(row + 1, column + 1);
 			}
 
-			// Note: A blank cell will never be touching a mine.
-
-			cells[row][column].setText("" + grid[row][column]);
+			// mark cell as having been visited (redundant for blank cells, but can't be helped)
 			cells[row][column].setEnabled(false);
+
+			// show cell (including numbered cells)
+			cells[row][column].setText("" + grid[row][column]);
+
+			// Note: A blank cell will never be touching a mine.
 		}
 	}
 
