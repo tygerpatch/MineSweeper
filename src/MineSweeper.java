@@ -85,17 +85,7 @@ public class MineSweeper extends JFrame implements MouseListener {
 		}
 
 		// "splatter" grid with mines
-		// splatter();
-
-		grid[0] = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8'};
-		grid[1] = new char[]{'0', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '8'};
-		grid[2] = new char[]{'0', ' ', '2', '3', '4', '5', '6', ' ', '8'};
-		grid[3] = new char[]{'0', ' ', '2', ' ', ' ', ' ', '6', ' ', '8'};
-		grid[4] = new char[]{'0', ' ', '2', ' ', '4', ' ', '6', ' ', '8'};
-		grid[5] = new char[]{'0', ' ', '2', ' ', '4', ' ', '6', ' ', '8'};
-		grid[6] = new char[]{'0', ' ', '2', ' ', '4', '5', '6', ' ', '8'};
-		grid[7] = new char[]{'0', ' ', '2', ' ', ' ', ' ', ' ', ' ', '8'};
-		grid[8] = new char[]{'0', ' ', '2', '3', '4', '5', '6', '7', '8'};
+		splatter();
 	}
 
 	// method to "splatter" grid with mines
