@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-// TODO: rename class to Minesweeper
+// TODO: clean up code
 public class MineSweeper extends JFrame implements MouseListener {
 
 	private final int NUM_ROWS = 9;
@@ -26,6 +26,7 @@ public class MineSweeper extends JFrame implements MouseListener {
 	private JButton cells[][] = new JButton[NUM_ROWS][NUM_COLUMNS];
 
 	private boolean isGameOver;
+	private int numMinesLeft;
 
 	public MineSweeper() {
 		JPanel panel = new JPanel(new GridLayout(9, 9));
@@ -72,6 +73,7 @@ public class MineSweeper extends JFrame implements MouseListener {
 
 	private void newGame() {
 		isGameOver = false;
+		numMinesLeft = NUM_MINES;
 
 		// every grid cell starts off empty
 		for(int row = 0; row < NUM_ROWS; row++) {
@@ -241,21 +243,40 @@ public class MineSweeper extends JFrame implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent) {
 		Cell cell = (Cell) mouseEvent.getSource();
+		int row = cell.getRow();
+		int column = cell.getColumn();
 
 		if(SwingUtilities.isRightMouseButton(mouseEvent)) {
 			if(cell.getText().equalsIgnoreCase("F")) {
 				cell.setText(" ");
+				numMinesLeft--;
 			}
 			else {
 				cell.setText("F");
-				// TODO: count # flags & notify user when they've won the game
+
+				// User has to flag mines in order to win, not a random selection of cells.
+				if('M' == grid[row][column]){
+					numMinesLeft--;
+
+					if(0 == numMinesLeft) {
+						int result = JOptionPane.showConfirmDialog(null, "Play Again?", "Congratulations! You Won!!!", JOptionPane.YES_NO_OPTION);
+
+						if(JOptionPane.YES_OPTION == result) {
+							newGame();
+						}
+						else {
+							// close JfFrame window
+							dispose();
+
+							// Where I learned about dispose method
+							// http://stackoverflow.com/questions/2352727/closing-jframe-with-button-click
+						}
+					}
+				}
 			}
 		}
 		// essentially disallow user from digging up flag
 		else if(!cell.getText().equalsIgnoreCase("F") && !isGameOver) {
-				int row = cell.getRow();
-				int column = cell.getColumn();
-
 				char ch = grid[row][column];
 
 				cell.setText("" + ch);
@@ -275,10 +296,6 @@ public class MineSweeper extends JFrame implements MouseListener {
 
 						// Where I learned about dispose method
 						// http://stackoverflow.com/questions/2352727/closing-jframe-with-button-click
-
-//						System.out.println("TODO: Close Window");
-//						Container container = this.getParent();
-//						System.out.println(container);
 					}
 				}
 				else if(' ' == ch) {
