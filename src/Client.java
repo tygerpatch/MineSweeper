@@ -30,17 +30,6 @@ public class Client extends JPanel implements MouseListener {
 	public Client() {
 		this.setLayout(new GridLayout(9, 9));
 
-		isGameOver = false;
-
-		for(int row = 0; row < NUM_ROWS; row++) {
-			for(int column = 0; column < NUM_COLUMNS; column++) {
-				grid[row][column] = ' ';	// empty square
-			}
-		}
-
-		// "splatter" grid with mines
-		splatter();
-
 		// calculate the preferred size for the JPanel
 		JButton button = new JButton("M");
 		Font font = button.getFont();
@@ -58,10 +47,9 @@ public class Client extends JPanel implements MouseListener {
 
 		for(int row = 0; row < NUM_ROWS; row++) {
 			for(int column = 0; column < NUM_COLUMNS; column++) {
-				button = new Cell("  ", row, column);
+				button = new Cell(row, column);
 				cells[row][column] = button;
 
-				// button.addActionListener(this);
 				button.addMouseListener(this);
 
 				// change margin size to reduce amount of space needed to display button's label
@@ -72,6 +60,24 @@ public class Client extends JPanel implements MouseListener {
 				add(button);
 			}
 		}
+
+		newGame();
+	}
+
+	private void newGame() {
+		isGameOver = false;
+
+		// every grid cell starts off empty
+		for(int row = 0; row < NUM_ROWS; row++) {
+			for(int column = 0; column < NUM_COLUMNS; column++) {
+				grid[row][column] = ' ';
+				cells[row][column].setText(" ");
+				cells[row][column].setEnabled(true);
+			}
+		}
+
+		// "splatter" grid with mines
+		splatter();
 	}
 
 	// method to "splatter" grid with mines
@@ -255,7 +261,7 @@ public class Client extends JPanel implements MouseListener {
 					int result = JOptionPane.showConfirmDialog(null, "Play Again?", "Game Over", JOptionPane.YES_NO_OPTION);
 
 					if(JOptionPane.YES_OPTION == result) {
-						System.out.println("TODO: Play Again");
+						newGame();
 					}
 					else {
 						System.out.println("TODO: Close Window");
