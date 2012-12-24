@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 // TODO: rename class to Minesweeper
-public class Client extends JPanel implements MouseListener {
+public class MineSweeper extends JFrame implements MouseListener {
 
 	private final int NUM_ROWS = 9;
 	private final int NUM_COLUMNS = 9;
@@ -27,8 +27,8 @@ public class Client extends JPanel implements MouseListener {
 
 	private boolean isGameOver;
 
-	public Client() {
-		this.setLayout(new GridLayout(9, 9));
+	public MineSweeper() {
+		JPanel panel = new JPanel(new GridLayout(9, 9));
 
 		// calculate the preferred size for the JPanel
 		JButton button = new JButton("M");
@@ -57,11 +57,17 @@ public class Client extends JPanel implements MouseListener {
 
 				// Where I learned about margins.
 				// http://www.coderanch.com/t/345647/GUI/java/JButton-text-padding
-				add(button);
+				panel.add(button);
 			}
 		}
 
 		newGame();
+
+		setTitle("~ minesweeper ~");
+		setContentPane(panel);
+		pack();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
 	}
 
 	private void newGame() {
@@ -264,7 +270,15 @@ public class Client extends JPanel implements MouseListener {
 						newGame();
 					}
 					else {
-						System.out.println("TODO: Close Window");
+						// close JfFrame window
+						dispose();
+
+						// Where I learned about dispose method
+						// http://stackoverflow.com/questions/2352727/closing-jframe-with-button-click
+
+//						System.out.println("TODO: Close Window");
+//						Container container = this.getParent();
+//						System.out.println(container);
 					}
 				}
 				else if(' ' == ch) {
@@ -318,11 +332,6 @@ public class Client extends JPanel implements MouseListener {
 	}
 
 	public static void main(String[] args) {
-		JFrame frame = new JFrame("~ minesweeper ~");
-		JPanel panel = new Client();
-		frame.setContentPane(panel);
-		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+		new MineSweeper();
 	}
 }
